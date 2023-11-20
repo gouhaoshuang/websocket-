@@ -6,11 +6,7 @@
     <title>Document</title>
 
     <style>
-        div{
-            width: 200px;
-            height:200px;
-            border:1px solid black
-        }
+
     </style>
 </head>
 <body>
@@ -25,7 +21,9 @@
         var input = document.querySelector('input');
         var button = document.querySelector('button');
         var div = document.querySelector('div');
-
+        const  TYPE_ENTER = 0
+        const TYPE_LEAVE = 1
+        const TYPE_MSG = 2
 
         //演示websocket如何使用
         var socket = new WebSocket('ws://localhost:3000');
@@ -43,8 +41,20 @@
 
         //4. 接收WebSocket的数据
         socket.addEventListener('message',function(e){
-            div.innerHTML += e.data + '<br>'
-              
+            var data = JSON.parse(e.data)//将json字符串对象转换成js对象
+            console.log(data);
+            var dv = document.createElement('div');
+            dv.innerHTML = data.msg + '-----' + data.time  +'<br>'
+
+            if(data.type === TYPE_ENTER){
+                dv.style.color = 'green';
+            }else if (data.type === TYPE_LEAVE){
+                dv.style.color = 'red';
+            }else {
+                dv.style.color= 'blue' 
+            }
+            
+            div.appendChild(dv);
 
         })
 
